@@ -54,9 +54,6 @@ class Buttons(threading.Thread):
 
     def run(self):
         delay_counter = 0
-        is_playing = False
-
-        print(client.get_rate())
 
         while self.running:
             if 5000 < delay_counter:
