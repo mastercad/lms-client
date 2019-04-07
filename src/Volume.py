@@ -100,7 +100,6 @@ class Volume(threading.Thread):
             if volume:
                 client.set_volume(volume)
 
-
     def __del__(self):
         print("EXIT Volume")
         GPIO.cleanup()

@@ -10,16 +10,15 @@ import LMSClient
 
 client = LMSClient.get_client()
 config = Config.get_config()
-is_playing = False
 
 pin_btn_next = config.getint('gpio', 'next')
 pin_btn_prev = config.getint('gpio', 'prev')
 pin_btn_play = config.getint('gpio', 'play')
 
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(pin_btn_next, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
-GPIO.setup(pin_btn_prev, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
-GPIO.setup(pin_btn_play, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
+GPIO.setup(pin_btn_next, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(pin_btn_prev, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(pin_btn_play, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 
 # def button1(channel):
@@ -62,7 +61,7 @@ class Buttons(threading.Thread):
 
     def run(self):
         delay_counter = 0
-        global is_playing
+        is_playing = False
 
         while self.running:
             if 5000 < delay_counter:
@@ -73,7 +72,7 @@ class Buttons(threading.Thread):
                 btn_prev()
             if GPIO.input(pin_btn_play):
                 is_playing = btn_toggle_play(is_playing)
-                time.sleep(2)
+                time.sleep(.5)
             delay_counter += 1
 
     def __del__(self):
