@@ -1,0 +1,17 @@
+[database]
+host_name = nfc_client
+
+[lms]
+server = localhost
+client_name = Windows10
+
+[new-entry]
+test = None
+
+[gpio]
+next = 12
+prev = 16
+play = 13
+volume = 25
+
+[nfc]
