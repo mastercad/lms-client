@@ -25,6 +25,8 @@ LOW = False
 oldValue = 1
 maxValue = 1024
 
+client = LMSClient.get_client()
+
 
 def read_analog_data(adCh, CLKPin, DINPin, DOUTPin, CSPin):
     global oldValue
@@ -94,7 +96,11 @@ class Volume(threading.Thread):
         print("Player Volume %s" % player.get_volume())
 
         while self.running:
-            print(read_analog_data(CH, CLK, DIN, DOUT, CS))
+            volume = read_analog_data(CH, CLK, DIN, DOUT, CS)
+
+            if volume:
+                client.set_volume(volume)
+
 
     def __del__(self):
         print("EXIT Volume")
