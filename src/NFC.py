@@ -1,8 +1,9 @@
 #!/usr/bin/env python2
+# -*- coding: utf8 -*-
 import threading
 import time
 import RPi.GPIO as GPIO
-import MFRC522
+import mfrc522
 import signal
 
 import DatabaseProvider
@@ -21,12 +22,12 @@ def end_read(signal, frame):
 class NFC(threading.Thread):
 
     def run(self):
-        global  continue_reading
+        global continue_reading
         # Hook the SIGINT
         signal.signal(signal.SIGINT, end_read)
 
         # Create an object of the class MFRC522
-        MIFAREReader = MFRC522.MFRC522()
+        MIFAREReader = mfrc522.MFRC522()
 
         while continue_reading:
             # Scan for cards

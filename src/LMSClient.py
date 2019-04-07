@@ -1,4 +1,5 @@
 #!/usr/bin/env python2
+# -*- coding: utf8 -*-
 from pylms.player import Player
 
 import Config

@@ -7,9 +7,9 @@ import LMSClient
 
 config = Config.get_config()
 
-pin_btn_next = config.get('gpio', 'next')
-pin_btn_prev = config.get('gpio', 'prev')
-pin_btn_play = config.get('gpio', 'play')
+pin_btn_next = config.getint('gpio', 'next')
+pin_btn_prev = config.getint('gpio', 'prev')
+pin_btn_play = config.getint('gpio', 'play')
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(pin_btn_next, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
