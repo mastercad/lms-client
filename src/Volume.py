@@ -77,6 +77,16 @@ def read_analog_data(adCh, CLKPin, DINPin, DOUTPin, CSPin):
 
 
 class Volume(threading.Thread):
+    def __init__(self):
+        super(Volume, self).__init__()
+        self._stop_event = threading.Event()
+
+    def stop(self):
+        self._stop_event.set()
+
+    def stopped(self):
+        return self._stop_event.is_set()
+
     def run(self):
         player = LMSClient.get_client()
         print("Player Volume %s" % player.get_volume())

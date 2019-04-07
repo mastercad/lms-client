@@ -36,6 +36,15 @@ def btn_play():
 
 
 class Buttons(threading.Thread):
+    def __init__(self):
+        super(Buttons, self).__init__()
+        self._stop_event = threading.Event()
+
+    def stop(self):
+        self._stop_event.set()
+
+    def stopped(self):
+        return self._stop_event.is_set()
     def run(self):
         delay_counter = 0
 
