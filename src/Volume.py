@@ -62,15 +62,14 @@ def read_analog_data(adCh, CLKPin, DINPin, DOUTPin, CSPin):
     minTolerance = oldValue - 100
     maxTolerance = oldValue + 100
 
-    print("MinTolerance: "+str(minTolerance))
-    print("MaxTolerance: "+str(maxTolerance))
-    print("adchvalue: "+str(adchvalue))
+#    print("MinTolerance: "+str(minTolerance))
+#    print("MaxTolerance: "+str(maxTolerance))
+#    print("adchvalue: "+str(adchvalue))
 
     if minTolerance <= adchvalue <= maxTolerance:
         oldValue = adchvalue
 
     if oldValue < 1:
-        print("OldValue ist kleiner 1!")
         return 0
 
     return oldValue
@@ -93,7 +92,7 @@ class Volume(threading.Thread):
 
     def run(self):
         player = LMSClient.get_client()
-        print("Player Volume %s" % player.get_volume())
+        #print("Player Volume %s" % player.get_volume())
 
         while self.running:
             volume = read_analog_data(CH, CLK, DIN, DOUT, CS)

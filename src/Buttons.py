@@ -3,6 +3,7 @@
 
 import RPi.GPIO as GPIO
 import threading
+import time
 
 import Config
 import LMSClient
@@ -35,16 +36,15 @@ def btn_prev():
 
 
 # def button3(channel):
-def btn_play():
-    global is_playing
+def btn_toggle_play(is_playing):
     if is_playing:
         client.pause()
-        is_playing = False
         print("Button pause pressed!")
+        return False
     else:
         client.pause()
-        is_playing = True
         print("Button play pressed!")
+        return True
 
 
 class Buttons(threading.Thread):
@@ -62,6 +62,7 @@ class Buttons(threading.Thread):
 
     def run(self):
         delay_counter = 0
+        global is_playing
 
         while self.running:
             if 5000 < delay_counter:
@@ -71,7 +72,8 @@ class Buttons(threading.Thread):
             if GPIO.input(pin_btn_prev):
                 btn_prev()
             if GPIO.input(pin_btn_play):
-                btn_play()
+                is_playing = btn_toggle_play(is_playing)
+                time.sleep(2)
             delay_counter += 1
 
     def __del__(self):
