@@ -90,6 +90,8 @@ class Volume(threading.Thread):
         return self._stop_event.is_set()
 
     def run(self):
+        global oldValue
+        oldValue = client.get_volume() / float(1024)
         while self.running:
             volume = read_analog_data(CH, CLK, DIN, DOUT, CS)
             client.set_volume(volume)

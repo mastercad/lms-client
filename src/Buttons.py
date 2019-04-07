@@ -35,15 +35,8 @@ def btn_prev():
 
 
 # def button3(channel):
-def btn_toggle_play(is_playing):
-    if is_playing:
-        client.pause()
-        print("Button pause pressed!")
-        return False
-    else:
-        client.play()
-        print("Button play pressed!")
-        return True
+def btn_toggle_play():
+    client.toggle()
 
 
 class Buttons(threading.Thread):
@@ -63,6 +56,8 @@ class Buttons(threading.Thread):
         delay_counter = 0
         is_playing = False
 
+        print(client.get_rate())
+
         while self.running:
             if 5000 < delay_counter:
                 delay_counter = 0  # type: int
@@ -71,6 +66,6 @@ class Buttons(threading.Thread):
             if GPIO.input(pin_btn_prev):
                 btn_prev()
             if GPIO.input(pin_btn_play):
-                is_playing = btn_toggle_play(is_playing)
+                btn_toggle_play()
                 time.sleep(.5)
             delay_counter += 1
