@@ -41,7 +41,7 @@ def btn_toggle_play(is_playing):
         print("Button pause pressed!")
         return False
     else:
-        client.pause()
+        client.play()
         print("Button play pressed!")
         return True
 
