@@ -73,7 +73,7 @@ def read_analog_data(adCh, CLKPin, DINPin, DOUTPin, CSPin):
         return 0
 
     volume = (oldValue / float(maxValue)) * 100
-    return (volume / 5) * 5
+    return (int(volume) / 5) * 5
 
 
 class Volume(threading.Thread):
