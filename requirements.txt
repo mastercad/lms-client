@@ -24,3 +24,6 @@ virtualenv==16.4.3
 virtualenvwrapper-win==1.2.5
 vistir==0.3.1
 yaspin==0.14.1
+mfrc522==0.6.5
+mcp3008==0.1a3
+RPi.GPIO==0.6.5

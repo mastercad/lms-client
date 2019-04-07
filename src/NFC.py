@@ -1,5 +1,6 @@
 #!/usr/bin/env python2
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
+
 import threading
 import time
 import RPi.GPIO as GPIO
