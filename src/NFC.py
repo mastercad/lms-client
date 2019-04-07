@@ -7,20 +7,23 @@ import signal
 
 import DatabaseProvider
 
+continue_reading = True
+
+
+# Capture SIGINT for cleanup when the script is aborted
+def end_read(signal, frame):
+    global continue_reading
+    print "Ctrl+C captured, ending read."
+    continue_reading = False
+    GPIO.cleanup()
+
 
 class NFC(threading.Thread):
-    # Capture SIGINT for cleanup when the script is aborted
-    def end_read(signal, frame):
-        global continue_reading
-        print "Ctrl+C captured, ending read."
-        continue_reading = False
-        GPIO.cleanup()
 
     def run(self):
-        continue_reading = True
-
+        global  continue_reading
         # Hook the SIGINT
-        signal.signal(signal.SIGINT, self.end_read())
+        signal.signal(signal.SIGINT, end_read)
 
         # Create an object of the class MFRC522
         MIFAREReader = MFRC522.MFRC522()
