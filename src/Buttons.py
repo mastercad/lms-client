@@ -37,18 +37,21 @@ def btn_play():
 
 class Buttons(threading.Thread):
     def __init__(self):
+        self.running = True
         super(Buttons, self).__init__()
         self._stop_event = threading.Event()
 
     def stop(self):
+        self.running = False
         self._stop_event.set()
 
     def stopped(self):
         return self._stop_event.is_set()
+
     def run(self):
         delay_counter = 0
 
-        while True:
+        while self.running:
             if 5000 < delay_counter:
                 delay_counter = 0  # type: int
             if GPIO.input(pin_btn_next):

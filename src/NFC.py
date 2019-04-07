@@ -12,34 +12,24 @@ import DatabaseProvider
 continue_reading = True
 
 
-# Capture SIGINT for cleanup when the script is aborted
-def end_read(signal, frame):
-    global continue_reading
-    print "Ctrl+C captured, ending read."
-    continue_reading = False
-    GPIO.cleanup()
-
-
 class NFC(threading.Thread):
     def __init__(self):
+        self.running = True
         super(NFC, self).__init__()
         self._stop_event = threading.Event()
 
     def stop(self):
+        self.running = False
         self._stop_event.set()
 
     def stopped(self):
         return self._stop_event.is_set()
 
     def run(self):
-        global continue_reading
-        # Hook the SIGINT
-        signal.signal(signal.SIGINT, end_read)
-
         # Create an object of the class MFRC522
         MIFAREReader = mfrc522.MFRC522()
 
-        while continue_reading:
+        while self.running:
             # Scan for cards
             (status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
 
