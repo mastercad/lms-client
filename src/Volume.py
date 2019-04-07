@@ -83,3 +83,7 @@ class Volume(threading.Thread):
 
         while True:
             print(read_analog_data(CH, CLK, DIN, DOUT, CS))
+
+    def __del__(self):
+        print("EXIT Volume")
+        GPIO.cleanup()

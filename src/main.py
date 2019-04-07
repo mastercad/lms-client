@@ -31,7 +31,7 @@ def main():
         except KeyboardInterrupt:
             # Ctrl-C handling and send kill to threads
             print "Sending kill to threads..."
-            for thread in threads:
+            for thread in threads:  # type: thread
                 thread.kill_received = True
 
     print "Exited"

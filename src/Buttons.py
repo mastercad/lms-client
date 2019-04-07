@@ -49,3 +49,7 @@ class Buttons(threading.Thread):
             if GPIO.input(pin_btn_play):
                 btn_play()
             delay_counter += 1
+
+    def __del__(self):
+        print("Exit BUTTONS")
+        GPIO.cleanup()
