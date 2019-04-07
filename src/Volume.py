@@ -72,9 +72,7 @@ def read_analog_data(adCh, CLKPin, DINPin, DOUTPin, CSPin):
     if oldValue < 1:
         return 0
 
-#    return oldValue
-    return int((oldValue / maxValue) * 100)
-#    return (maxValue / oldValue) * 100
+    return (((oldValue / float(maxValue)) * 100) / float(5)) * 5
 
 
 class Volume(threading.Thread):
@@ -91,10 +89,6 @@ class Volume(threading.Thread):
         return self._stop_event.is_set()
 
     def run(self):
-        player = LMSClient.get_client()
-        #print("Player Volume %s" % player.get_volume())
-
         while self.running:
             volume = read_analog_data(CH, CLK, DIN, DOUT, CS)
-            print "Volume: "+str(volume)
             client.set_volume(volume)

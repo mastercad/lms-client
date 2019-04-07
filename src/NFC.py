@@ -47,7 +47,7 @@ class NFC(threading.Thread):
                 print "Card read UID: %s,%s,%s,%s" % (uid[0], uid[1], uid[2], uid[3])
 
                 # This is the default key for authentication
-                key = [0xFF,0xFF,0xFF,0xFF,0xFF,0xFF]
+                key = [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
 
                 # Select the scanned tag
                 MIFAREReader.MFRC522_SelectTag(uid)
