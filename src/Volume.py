@@ -72,8 +72,8 @@ def read_analog_data(adCh, CLKPin, DINPin, DOUTPin, CSPin):
     if oldValue < 1:
         return 0
 
-    return oldValue
-#    return (oldValue / maxValue) * 100
+#    return oldValue
+    return int((oldValue / maxValue) * 100)
 #    return (maxValue / oldValue) * 100
 
 
@@ -96,10 +96,5 @@ class Volume(threading.Thread):
 
         while self.running:
             volume = read_analog_data(CH, CLK, DIN, DOUT, CS)
-
-            if volume:
-                client.set_volume(volume)
-
-    def __del__(self):
-        print("EXIT Volume")
-        GPIO.cleanup()
+            print "Volume: "+str(volume)
+            client.set_volume(volume)

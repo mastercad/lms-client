@@ -61,7 +61,3 @@ class NFC(threading.Thread):
                     MIFAREReader.MFRC522_StopCrypto1()
                 else:
                     print "Authentication error"
-
-    def __del__(self):
-        print("Exit NFC")
-        GPIO.cleanup()

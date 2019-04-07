@@ -74,7 +74,3 @@ class Buttons(threading.Thread):
                 is_playing = btn_toggle_play(is_playing)
                 time.sleep(.5)
             delay_counter += 1
-
-    def __del__(self):
-        print("Exit BUTTONS")
-        GPIO.cleanup()
