@@ -4,6 +4,7 @@ from NFC import NFC
 from Volume import Volume
 import RPi.GPIO as GPIO
 
+
 def has_live_threads(threads):
     return True in [thread.isAlive() for thread in threads]
 

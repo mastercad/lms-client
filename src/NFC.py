@@ -5,7 +5,6 @@ import threading
 import time
 import RPi.GPIO as GPIO
 import mfrc522
-import signal
 
 import DatabaseProvider
 
@@ -38,7 +37,7 @@ class NFC(threading.Thread):
                 print "Card detected"
 
             # Get the UID of the card
-            (status,uid) = MIFAREReader.MFRC522_Anticoll()
+            (status, uid) = MIFAREReader.MFRC522_Anticoll()
 
             # If we have the UID, continue
             if status == MIFAREReader.MI_OK:
@@ -57,7 +56,7 @@ class NFC(threading.Thread):
 
                 # Check if authenticated
                 if status == MIFAREReader.MI_OK:
-                    MIFAREReader.MFRC522_Read(8)
-                    MIFAREReader.MFRC522_StopCrypto1()
+                    print MIFAREReader.MFRC522_Read(8)
+                    print MIFAREReader.MFRC522_StopCrypto1()
                 else:
                     print "Authentication error"
