@@ -38,9 +38,9 @@ def read_analog_data(adCh, CLKPin, DINPin, DOUTPin, CSPin):
     cmd = adCh
     cmd |= 0b00011000
 
-    averageVolume = oldValue
-    minTolerance = oldValue - 100
-    maxTolerance = oldValue + 100
+    average_volume = oldValue
+    min_tolerance = oldValue - 100
+    max_tolerance = oldValue + 100
 
     for average_range in range(20):
         for i in range(5):
@@ -51,21 +51,22 @@ def read_analog_data(adCh, CLKPin, DINPin, DOUTPin, CSPin):
             # Clocksignal negative Flanke erzeugen
             GPIO.output(CLKPin, HIGH)
             GPIO.output(CLKPin, LOW)
-            cmd <<= 1 # Bitfolge eine Position nach links verschieben
+            cmd <<= 1  # Bitfolge eine Position nach links verschieben
 
         # Datenabruf
-        adchvalue = 0 # Wert auf 0 zuruecksetzen
+        adch_value = 0  # Wert auf 0 zuruecksetzen
         for i in range(11):
             GPIO.output(CLKPin, HIGH)
             GPIO.output(CLKPin, LOW)
-            adchvalue <<= 1 # 1 Postition nach links schieben
-            if(GPIO.input(DOUTPin)):
-                adchvalue |= 0x01
+            adch_value <<= 1  # 1 Postition nach links schieben
 
-        if minTolerance <= adchvalue <= maxTolerance:
-            averageVolume += adchvalue
+            if GPIO.input(DOUTPin):
+                adch_value |= 0x01
 
-    oldValue = averageVolume / 20
+        if min_tolerance <= adch_value <= max_tolerance:
+            average_volume += adch_value
+
+    oldValue = average_volume / 20
 
 #    time.sleep(0.5)
 
