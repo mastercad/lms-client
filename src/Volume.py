@@ -38,42 +38,49 @@ def read_analog_data(adCh, CLKPin, DINPin, DOUTPin, CSPin):
     cmd = adCh
     cmd |= 0b00011000
 
-    for i in range(5):
-        if cmd & 0x10:  # 4. Bit prüfen und mit 0 anfangen
-            GPIO.output(DINPin, HIGH)
-        else:
-            GPIO.output(DINPin, LOW)
-        # Clocksignal negative Flanke erzeugen
-        GPIO.output(CLKPin, HIGH)
-        GPIO.output(CLKPin, LOW)
-        cmd <<= 1 # Bitfolge eine Position nach links verschieben
-
-    # Datenabruf
-    adchvalue = 0 # Wert auf 0 zuruecksetzen
-    for i in range(11):
-        GPIO.output(CLKPin, HIGH)
-        GPIO.output(CLKPin, LOW)
-        adchvalue <<= 1 # 1 Postition nach links schieben
-        if(GPIO.input(DOUTPin)):
-            adchvalue |= 0x01
-
-    time.sleep(0.5)
-
+    averageVolume = oldValue
     minTolerance = oldValue - 100
     maxTolerance = oldValue + 100
+
+    for average_range in range(20):
+        for i in range(5):
+            if cmd & 0x10:  # 4. Bit prüfen und mit 0 anfangen
+                GPIO.output(DINPin, HIGH)
+            else:
+                GPIO.output(DINPin, LOW)
+            # Clocksignal negative Flanke erzeugen
+            GPIO.output(CLKPin, HIGH)
+            GPIO.output(CLKPin, LOW)
+            cmd <<= 1 # Bitfolge eine Position nach links verschieben
+
+        # Datenabruf
+        adchvalue = 0 # Wert auf 0 zuruecksetzen
+        for i in range(11):
+            GPIO.output(CLKPin, HIGH)
+            GPIO.output(CLKPin, LOW)
+            adchvalue <<= 1 # 1 Postition nach links schieben
+            if(GPIO.input(DOUTPin)):
+                adchvalue |= 0x01
+
+        if minTolerance <= adchvalue <= maxTolerance:
+            averageVolume += adchvalue
+
+    oldValue = averageVolume / 20
+
+#    time.sleep(0.5)
 
 #    print("MinTolerance: "+str(minTolerance))
 #    print("MaxTolerance: "+str(maxTolerance))
 #    print("adchvalue: "+str(adchvalue))
 
-    if minTolerance <= adchvalue <= maxTolerance:
-        oldValue = adchvalue
+#    if minTolerance <= adchvalue <= maxTolerance:
+#        oldValue = adchvalue
 
-    if oldValue < 1:
-        return 0
+#    if oldValue < 1:
+#        return 0
 
-    volume = (oldValue / float(maxValue)) * 100
-    return (int(volume) / 5) * 5
+    return (oldValue / float(maxValue)) * 100
+#    return (int(volume) / 5) * 5
 
 
 class Volume(threading.Thread):
