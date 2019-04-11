@@ -60,8 +60,10 @@ class Buttons(threading.Thread):
                 delay_counter = 0  # type: int
             if GPIO.input(pin_btn_next):
                 btn_next()
+                time.sleep(.5)
             if GPIO.input(pin_btn_prev):
                 btn_prev()
+                time.sleep(.5)
             if GPIO.input(pin_btn_play):
                 btn_toggle_play()
                 time.sleep(.5)
