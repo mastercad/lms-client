@@ -26,17 +26,20 @@ def btn_next():
     # GPIO.remove_event_detect(5);
     client.next()
     print("Button next pressed!")
+    time.sleep(.5)
 
 
 # def button2(channel):
 def btn_prev():
     client.prev()
     print("Button prev pressed!")
+    time.sleep(.5)
 
 
 # def button3(channel):
 def btn_toggle_play():
     client.toggle()
+    time.sleep(.5)
 
 
 class Buttons(threading.Thread):
@@ -60,11 +63,10 @@ class Buttons(threading.Thread):
                 delay_counter = 0  # type: int
             if GPIO.input(pin_btn_next):
                 btn_next()
-                time.sleep(.5)
             if GPIO.input(pin_btn_prev):
                 btn_prev()
-                time.sleep(.5)
             if GPIO.input(pin_btn_play):
                 btn_toggle_play()
-                time.sleep(.5)
+
+            time.sleep(.1)
             delay_counter += 1

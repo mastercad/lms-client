@@ -3,7 +3,6 @@
 
 import threading
 import time
-import RPi.GPIO as GPIO
 import mfrc522
 
 import DatabaseProvider
@@ -29,6 +28,8 @@ class NFC(threading.Thread):
         MIFAREReader = mfrc522.MFRC522()
 
         while self.running:
+            time.sleep(0.1)
+
             # Scan for cards
             (status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
 
