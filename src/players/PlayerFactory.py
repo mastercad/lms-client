@@ -3,16 +3,13 @@
 import players.LMSPlayer as LMSPlayer
 import players.VLCPlayer as VLCPlayer
 
-ONLINE = 1
-OFFLINE = 2
 
-
-def produce(onlineState):
+def produce(online):
     """
 
     :rtype: Player|VLCPlayer
     """
-    if onlineState is ONLINE:
+    if online is True:
         return LMSPlayer.get_client()
-    elif onlineState is OFFLINE:
+    else:
         return VLCPlayer.get_client()

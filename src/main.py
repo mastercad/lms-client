@@ -1,18 +1,19 @@
 #!/usr/bin/env python2
+# -*- coding: utf-8 -*-
 try:
     threads = []
     isOnline = False
 
-    import LMSPlayerProvider
+    import RPi.GPIO as GPIO
+    import time
+
+    import players.PlayerFactory as PlayerFactory
     import LMSAvailabilityCheck
     from Exceptions import ClientNotFoundException
     from Exceptions import ServerNotFoundException
     from Buttons import Buttons
     from NFC import NFC
     from Volume import Volume
-    import RPi.GPIO as GPIO
-    import time
-    import players.PlayerFactory as PlayerFactory
 
     def has_live_threads(threads):
         return True in [thread.isAlive() for thread in threads]
@@ -21,7 +22,7 @@ try:
     def main():
         global threads
 
-        player = LMSPlayerProvider.provide()
+        player = PlayerFactory.produce(LMSAvailabilityCheck.check())
 
         button = Buttons(player)
         button.start()
@@ -38,12 +39,14 @@ try:
         while has_live_threads(threads):
             # synchronization timeout of threads kill
             [thread.join(1) for thread in threads
-             if thread is not None and thread.isAlive()]
+            if thread is not None and thread.isAlive()]
 
+            # das dient später einem dynamischen austausch der player wenn während der wiedergabe der LMS weg ist
             if LMSAvailabilityCheck.check() is True:
                 print ("Online")
             else:
                 print ("Offline")
+
             time.sleep(5)
 
     if __name__ == '__main__':
@@ -51,7 +54,6 @@ try:
 
 #except (KeyboardInterrupt, ClientNotFoundException, ServerNotFoundException) as exception:
 except (KeyboardInterrupt, Exception) as exception:
-    # Ctrl-C handling and send kill to threads
     print exception
     print "Sending kill to threads..."
 
