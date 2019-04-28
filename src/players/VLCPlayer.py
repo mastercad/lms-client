@@ -31,9 +31,14 @@ class VLCPlayer:
             self.play_file(self.load_last_played_file())
 
     def next(self):
+        if self.paused is False and self.player.is_playing:
+            self.player.stop()
         return
 
     def prev(self):
+        if self.paused is False and self.player.is_playing:
+            self.player.stop()
+            self.player.play()
         return
 
     def play(self):
