@@ -5,8 +5,6 @@ import threading
 import time
 import RPi.GPIO as GPIO
 
-import LMSClient
-
 GPIO.setmode(GPIO.BCM)
 
 CH = 0    # Analog/Digital-Channel
@@ -17,17 +15,16 @@ CS = 7   # Chip-Select
 
 GPIO.setup(CLK, GPIO.OUT)
 GPIO.setup(DIN, GPIO.OUT)
-GPIO.setup(DOUT,GPIO.IN)
 GPIO.setup(CS,  GPIO.OUT)
+GPIO.setup(DOUT,GPIO.IN)
 
 HIGH = True
 LOW = False
 
-client = LMSClient.get_client()
-
 INIT_VALUE = 9999999999
 maxValue = 1024
 prevValue = INIT_VALUE
+
 
 def read_analog_data_with_tollerance(adCh, CLKPin, DINPin, DOUTPin, CSPin):
     global maxValue
@@ -164,8 +161,10 @@ def read_analog_data(adCh, CLKPin, DINPin, DOUTPin, CSPin):
 
 
 class Volume(threading.Thread):
-    def __init__(self):
+
+    def __init__(self, player):
         self.running = True
+        self.player = player
         super(Volume, self).__init__()
         self._stop_event = threading.Event()
 
@@ -177,10 +176,8 @@ class Volume(threading.Thread):
         return self._stop_event.is_set()
 
     def run(self):
-        global oldValue
-        oldValue = client.get_volume() / float(1024)
         while self.running:
-            volume = read_analog_data_with_average(CH, CLK, DIN, DOUT, CS)
-            time.sleep(0.1)
+            volume = read_analog_data(CH, CLK, DIN, DOUT, CS)
+            time.sleep(0.5)
             print "Volume: "+str(volume)
-            client.set_volume(volume)
+            self.player.set_volume(volume)

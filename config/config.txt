@@ -2,7 +2,7 @@
 host_name = nfc_client
 
 [lms]
-server = 192.168.178.25
+server = 192.168.178.251
 client_name = raspberrypi
 
 [new-entry]
@@ -15,3 +15,6 @@ play = 13
 volume = 25
 
 [nfc]
+
+[offline]
+directory=/media
