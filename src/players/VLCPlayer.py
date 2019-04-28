@@ -21,10 +21,12 @@ class VLCPlayer:
         self.vlc_instance = vlc.Instance()  # :rtype: vlc
         self.player = self.vlc_instance.media_player_new()  # :rtype: MediaPlayer
         self.current_file = self.load_last_played_file()
+        self.paused=False
 
     def toggle(self):
         if self.player.is_playing():
-            self.player.stop()
+            self.paused=True
+            self.player.pause()
         else:
             self.play_file(self.load_last_played_file())
 
@@ -46,8 +48,9 @@ class VLCPlayer:
         return self.player.audio_get_volume()
 
     def play_file(self, media_file_path):
-        media = self.player.get_media()  # :rtype: Media
-        self.player.set_media(Media(media_file_path))
+        if False is self.paused:
+            self.player.set_media(Media(media_file_path))
+            self.paused=False
         self.player.play()
 
     def load_last_played_file(self):
