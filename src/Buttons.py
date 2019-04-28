@@ -6,7 +6,6 @@ import threading
 import time
 
 import Config
-import LMSClient
 
 config = Config.get_config()
 

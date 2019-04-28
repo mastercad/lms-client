@@ -47,8 +47,7 @@ class VLCPlayer:
 
     def play_file(self, media_file_path):
         media = self.player.get_media()  # :rtype: Media
-        media_file = Media(media_file_path)
-        self.player.set_media(media_file)
+        self.player.set_media(Media(media_file_path))
         self.player.play()
 
     def load_last_played_file(self):
