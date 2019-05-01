@@ -6,9 +6,13 @@ sudo rpi-update -y
 
 sudo apt-get install squeezelite
 
-
 python -m pip install pylms --user
 python -m pip install mfrc522 --user
+
+cp /boot/config.txt
+cp /etc/asound.conf
+rm ~/.asoundrc
+
 
 # Mit virtualenv umgehen
 installieren:
@@ -53,3 +57,19 @@ $ source venv_name/bin/activate
 
 # In PyCharm hat es die im virtuelenv installierten pakete nicht vorgeschlagen
 - das lag daran, das in den projekt einstellungen nicht der unter virtualenv installierte interpreter ausgewählt war
+
+# Soundkarte brachte ständig Gerät oder Ressource belegt
+- ich habe darauf hin in der /etc/asound.conf aus
+card 0 card 1 gemacht, damit ging es dann
+
+# soundkarte test
+speaker-test -c2 -Dplughw:0,0 -twav
+
+# liste der devices
+aplay -l
+
+# große liste der devices
+aplay -L
+
+# schreibrechte auf das device
+ls -lisa /dev/snd/pcmC0D0p
