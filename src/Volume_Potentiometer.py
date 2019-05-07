@@ -5,13 +5,13 @@ import threading
 import time
 import RPi.GPIO as GPIO
 
-GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BOARD)
 
 CH = 0    # Analog/Digital-Channel
-CLK = 21  # Clock / SCLK
-DIN = 20  # Digital in / MOSI
-DOUT = 19  # Digital out / MISO
-CS = 7   # Chip-Select
+CLK = 23  # Clock / SCLK BCM 11
+DIN = 19  # Digital in / MOSI BCM 10
+DOUT = 21  # Digital out / MISO BCM 9
+CS = 26   # Chip-Select BCM 7
 
 GPIO.setup(CLK, GPIO.OUT)
 GPIO.setup(DIN, GPIO.OUT)

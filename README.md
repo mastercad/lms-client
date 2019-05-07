@@ -8,9 +8,15 @@ sudo apt-get install squeezelite
 
 python -m pip install pylms --user
 python -m pip install mfrc522 --user
+python -m pip install python-vlc --user
+python -m pip install simple_queue --user
 
-cp /boot/config.txt
-cp /etc/asound.conf
+# alternativ installiert man diese libs per, dann aber ohne --user
+source bin/activate
+<venv> python2 -m pip install...
+
+sudo cp systemfiles/config.txt /boot/config.txt
+sudo cp systemfiles/asound.conf /etc/asound.conf
 rm ~/.asoundrc
 
 

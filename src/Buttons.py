@@ -9,32 +9,49 @@ import Config
 
 config = Config.get_config()
 
-pin_btn_next = config.getint('gpio', 'next')
-pin_btn_prev = config.getint('gpio', 'prev')
-pin_btn_play = config.getint('gpio', 'play')
+pin_btn_next        = config.getint('gpio', 'next')
+pin_btn_prev        = config.getint('gpio', 'prev')
+pin_btn_play        = config.getint('gpio', 'play')
+pin_btn_volume_up   = config.getint('gpio', 'volume_up')
+pin_btn_volume_down = config.getint('gpio', 'volume_down')
 
-GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BOARD)
 GPIO.setup(pin_btn_next, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(pin_btn_prev, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(pin_btn_play, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(pin_btn_volume_up, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(pin_btn_volume_down, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 
 def btn_next(player):
     # GPIO.remove_event_detect(5);
     player.next()
     print("Button next pressed!")
-    time.sleep(.5)
+#    time.sleep(.5)
 
 
 def btn_prev(player):
     player.prev()
     print("Button prev pressed!")
-    time.sleep(.5)
+#    time.sleep(.5)
 
 
 def btn_toggle_play(player):
     player.toggle()
-    time.sleep(.5)
+    print ("Play/Pause pressed")
+#    time.sleep(.5)
+
+
+def btn_volume_up(player):
+    player.prev()
+    print("Button volume up pressed!")
+#    time.sleep(.5)
+
+
+def btn_volume_down(player):
+    player.prev()
+    print("Button volume down pressed!")
+#    time.sleep(.5)
 
 
 class Buttons(threading.Thread):
@@ -63,6 +80,14 @@ class Buttons(threading.Thread):
                 btn_prev(self.player)
             if GPIO.input(pin_btn_play):
                 btn_toggle_play(self.player)
+            if GPIO.input(pin_btn_volume_up):
+                btn_volume_up(self.player)
+            if GPIO.input(pin_btn_volume_down):
+                btn_volume_down(self.player)
 
             time.sleep(.1)
             delay_counter += 1
+
+    def set_player(self, player):
+        self.player = player
+        return self

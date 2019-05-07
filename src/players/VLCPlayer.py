@@ -41,10 +41,13 @@ class VLCPlayer:
             self.player.play()
         return
 
-    def play(self):
+    def play(self, media_file):
+        self.current_file = media_file
+        # altlast, kann eventuell weg, war geplant um mit dem alten lied weiter zu machen
+        # wenn main neu gestartet wurde
         if "" == self.current_file:
             self.current_file = self.load_last_played_file()
-        self.player.play()
+        self.play_file(media_file)
 
     def set_volume(self, volume):
         self.player.audio_set_volume(int(volume))

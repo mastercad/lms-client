@@ -1,20 +1,27 @@
 [database]
-host_name = nfc_client
+host_name = lms_client
 
 [lms]
 server = 192.168.178.251
 client_name = raspberrypi
 
 [gpio]
-next = 12
-prev = 16
-play = 13
-volume = 25
+next = 31
+prev = 29
+play = 37
+volume_up = 10
+volume_down = 36
+
+;volume = 26
 
 [nfc]
 
+[player]
+; IF NFC REMOVED, STOP PLAYBACK?
+stop_by_interrupt=False
+
 [offline]
-directory=/media
+directory=/media/LMS
 
 [system]
 last_played_file=data/last_played_file

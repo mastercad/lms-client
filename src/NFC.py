@@ -5,13 +5,12 @@ import threading
 import time
 import mfrc522
 
-import DatabaseProvider
-
 continue_reading = True
 
 
 class NFC(threading.Thread):
-    def __init__(self):
+    def __init__(self, queue):
+        self.queue = queue
         self.running = True
         super(NFC, self).__init__()
         self._stop_event = threading.Event()
@@ -24,40 +23,49 @@ class NFC(threading.Thread):
         return self._stop_event.is_set()
 
     def run(self):
+
         # Create an object of the class MFRC522
         MIFAREReader = mfrc522.MFRC522()
 
         while self.running:
             time.sleep(0.1)
+            self.queue.queue.clear()
 
             # Scan for cards
-            (status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
+            (status,tag_type) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
+
+#            print "Status: "+str(status)
+#            print "TagType: "+str(tag_type)
 
             # If a card is found
             if status == MIFAREReader.MI_OK:
-                print "Card detected"
+                # Get the UID of the card
+                (status, uid) = MIFAREReader.MFRC522_Anticoll()
 
-            # Get the UID of the card
-            (status, uid) = MIFAREReader.MFRC522_Anticoll()
-
-            # If we have the UID, continue
-            if status == MIFAREReader.MI_OK:
-
-                # Print UID
-                print "Card read UID: %s,%s,%s,%s" % (uid[0], uid[1], uid[2], uid[3])
-
-                # This is the default key for authentication
-                key = [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
-
-                # Select the scanned tag
-                MIFAREReader.MFRC522_SelectTag(uid)
-
-                # Authenticate
-                status = MIFAREReader.MFRC522_Auth(MIFAREReader.PICC_AUTHENT1A, 8, key, uid)
-
-                # Check if authenticated
+                # If we have the UID, continue
                 if status == MIFAREReader.MI_OK:
-                    print MIFAREReader.MFRC522_Read(8)
-                    print MIFAREReader.MFRC522_StopCrypto1()
-                else:
-                    print "Authentication error"
+
+                    # This is the default key for authentication
+                    card_key = [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+
+                    # Select the scanned tag
+                    MIFAREReader.MFRC522_SelectTag(uid)
+
+                    # Authenticate
+                    status = MIFAREReader.MFRC522_Auth(MIFAREReader.PICC_AUTHENT1A, 8, card_key, uid)
+
+                    # Check if authenticated
+                    if status == MIFAREReader.MI_OK:
+                        self.queue.put(
+                            (
+                                "%s:%s:%s:%s" % (uid[0], uid[1], uid[2], uid[3]),
+                                ",".join("{0}".format(number) for number in MIFAREReader.MFRC522_Read(8))
+                            )
+                        )
+                        MIFAREReader.MFRC522_StopCrypto1()
+
+            # hier ist das problem, das immer wieder diese abfrage betreten wird, obwohl ein key aufgelegt ist
+            # ich plane hier ein signal an den aufrufer zu senden per queue um zu signalisieren, dass der key entfernt wurde
+#            elif MIFAREReader.MI_ERR == status and 0 == tag_type:
+#                self.key_queue.put("EMPTY")
+#                self.value_queue.put("EMPTY")
