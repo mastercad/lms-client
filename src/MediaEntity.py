@@ -32,7 +32,7 @@ class MediaEntity:
         self.special_information = special_information
         self.type = type
 
-        print (self.type, self.rfid, self.id, self.local_name, self.lms_name, self.special_information)
+        print (self.id, self.rfid, self.local_name, self.lms_name, self.special_information, self.type)
 
     def get_id(self):
         return self.id

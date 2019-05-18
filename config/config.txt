@@ -21,7 +21,8 @@ volume_down = 36
 stop_by_interrupt=False
 
 [offline]
-directory=/media/LMS
+;directory=/media/LMS
+directory=/home/pi/Music
 
 [system]
 last_played_file=data/last_played_file

@@ -32,11 +32,10 @@ class MediaPathResolver:
     def resolve_lms_media_path(self):
         media_path = None
         if "playlist" == self.media_entity.get_type():
-            media_path = "playlist id "+self.media_entity.get_lms_path()
-
+            media_path = "playlist id "+str(self.media_entity.get_lms_name())
         return media_path
 
     def resolve_local_media_path(self):
         local_base_bath = self.config.get('offline', 'directory')
-        media_path = local_base_bath+"/"+self.media_entity.get_local_path()
+        media_path = local_base_bath+"/"+str(self.media_entity.get_local_name())
         return media_path

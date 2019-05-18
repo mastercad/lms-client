@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
-from docutils.nodes import system_message
+#from docutils.nodes import system_message
 
 try:
     threads = []
@@ -105,6 +105,7 @@ try:
             if key != last_key:
                 last_key = key
                 media_entity = MediaMapper.resolve(key, value)
+                print ("Key: "+str(key)+" - Value: "+str(value))
                 if isinstance(media_entity, MediaEntity):
                     print ("Starte Verarbeitung")
                     media_manager.manage(media_entity)

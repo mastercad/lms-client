@@ -11,6 +11,10 @@ python -m pip install mfrc522 --user
 python -m pip install python-vlc --user
 python -m pip install simple_queue --user
 
+# installiert wird insgesamt:
+pylms, spidev, RPi.GPIO, mfrc522, python-vlc, pytz, blinker, six, docutils, simple-mappers, jmespath, futures, python-dateutil, urllib3, botocore, s3transfer, boto3, simple-queue, configparser
+
+
 # alternativ installiert man diese libs per, dann aber ohne --user
 source bin/activate
 <venv> python2 -m pip install...
@@ -18,6 +22,22 @@ source bin/activate
 sudo cp systemfiles/config.txt /boot/config.txt
 sudo cp systemfiles/asound.conf /etc/asound.conf
 rm ~/.asoundrc
+
+# VIRTUAL ENV installieren, einrichten und aktivieren
+cd lms-client
+python -m pip install --user virtualenv
+python2 -m virtualenv venv
+source venv/bin/activate
+pip install pylms
+pip install mfrc522
+pip install python-vlc
+pip install simple_queue
+
+# requirements anlegen
+pip freeze > requirements.txt
+
+# requirements installieren
+pip install -r requirements.txt
 
 
 # Mit virtualenv umgehen

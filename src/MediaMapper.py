@@ -24,8 +24,8 @@ def resolve(key_id, key_value):
         return MediaEntity(
             result['id'],
             result['rfid'],
-            result['local_path'],
-            result['lms_path'],
+            result['local_name'],
+            result['lms_name'],
             result['special_information'],
             result['type']
         )
