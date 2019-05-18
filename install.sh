@@ -1,5 +1,35 @@
 #!/bin/sh
-# sudo apt update -y && sudo apt install rpi-update && sudo rpi-update -y
+IP=`ip route get 1 | awk '{print $NF;exit}'`
+HOSTNAME="$1"
+
+backupFile() {
+    FILE="$1"
+
+    if [[ -f "$1" ] && [ ! -f "$1.bak" ]]
+    then
+        sudo cp "$1" "$1.bak"
+    fi
+}
+
+activateModule() {
+    PARMATER="$1"
+    FILE="$2"
+
+    if grep -qn "#$PARMATER" "$FILE"
+    then
+        sudo sed -i "s/\#$PARMATER/$PARMATER/g" "$FILE"
+    elif ! grep -qn "$PARMATER" "$FILE"
+    then
+        echo "$PARMATER" | sudo tee -a "$FILE"
+    fi
+}
+
+sudo apt update -y && sudo apt install rpi-update && sudo rpi-update -y && sudo apt install -y squeezelite alsa-utils
+
+# squeezelite autostart
+backupFile "/etc/rc.local"
+
+echo "/usr/bin/squeezelize-armv6hf -o sysdefault:CARD=ALSA -s $IP -n $HOSTNAME &" | sudo tee -a /etc/rc.local >> /dev/null
 
 # fliegt mehrmals mit einem error raus:
 # letzte zeilen sind in ungefähr:
@@ -8,24 +38,15 @@
 # TypeError: unsupported operand type(s) for -=: 'Retry' and 'int'
 # hier ist kein fehler klar. ich habe das mehrmals nacheinander ausgeführt und irgendwann ging es dann durch
 # eventuell netzwerk probleme
-# python -m pip install pylms mfrc522 python-vlc simple_queue configparser --user
+python -m pip install pylms mfrc522 python-vlc simple_queue configparser --user
 
-# $1 = parameter
-# $2 = file
-activateParam() {
-    if grep -qn "#$1" "$2"
-    then
-        sed -i "s/\#$1/$1/g" "$2"
-    elif ! grep -qn "$1" "$2"
-    then
-        echo "$1" >> "$2"
-    fi
-}
+# module aktivieren
+backupFile "/boot/config.txt"
+activateModule "dtparam=spi=on" "/boot/config.txt"
+activateModule "device_tree_param=spi=on" "/boot/config.txt"
+activateModule "dtoverlay=hifiberry-dac" "/boot/config.txt"
 
-# spi aktivieren
-activateParam "dtparam=spi=on" "/boot/config.txt"
-activateParam "device_tree_param=spi=on" "/boot/config.txt"
-activateParam "dtoverlay=hifiberry-dac" "/boot/config.txt"
+backupFile "/etc/asound.conf"
 
 echo "pcm.!default {
 	type hw
@@ -36,4 +57,4 @@ ctl.!default {
 	type hw
 	card 1
 }
-" > /etc/asound.conf
+" | sudo tee /etc/asound.conf >> /dev/null
