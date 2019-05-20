@@ -5,9 +5,9 @@ HOSTNAME="$1"
 backupFile() {
     FILE="$1"
 
-    if [ -f "$1" ] && [ ! -f "$1.bak" ]
+    if [ -f "$FILE" ] && [ ! -f "$FILE.bak" ]
     then
-        sudo cp "$1" "$1.bak"
+        sudo cp "$FILE" "$FILE.bak"
     fi
 }
 
@@ -30,7 +30,7 @@ sudo apt update -y && sudo apt install rpi-update && sudo rpi-update -y && sudo 
 backupFile "/etc/rc.local"
 
 # echo "/usr/bin/squeezelize-armv6hf -o sysdefault:CARD=ALSA -s $IP -n $HOSTNAME &" | sudo tee -a /etc/rc.local >> /dev/null
-activateModule "/usr/bin/squeezelize-armv6hf -o sysdefault:CARD=ALSA -s $IP -n $HOSTNAME &" "/etc/rc.local"
+activateModule "/usr/bin/squeezelize -o sysdefault:CARD=ALSA -s $IP -n $HOSTNAME &" "/etc/rc.local"
 
 # fliegt mehrmals mit einem error raus:
 # letzte zeilen sind in ungefähr:

@@ -55,7 +55,7 @@ def btn_volume_down(player):
 
 
 class Buttons(threading.Thread):
-    def __init__(self, player):
+    def __init__(self, player=None):
         self.player = player
         self.running = True
         super(Buttons, self).__init__()

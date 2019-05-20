@@ -11,6 +11,7 @@ try:
     import Queue
     import ctypes
     import os
+    import socket
 
     import players.PlayerFactory as PlayerFactory
     import LMSAvailabilityCheck
@@ -28,8 +29,9 @@ try:
 
     CLOCK_MONTONIC_RAW = 4
 
-    last_key = ''
-
+    last_key = None
+    is_online = False
+    player = PlayerFactory.produce(LMSAvailabilityCheck.check())
 
     class timespec(ctypes.Structure):
         _fields_ = [
@@ -57,9 +59,8 @@ try:
         global threads
         global queues
         global last_key
-
-        is_online = False
-        player = PlayerFactory.produce(LMSAvailabilityCheck.check())
+        global is_online
+        global player
 
         buttons = Buttons(player)
         buttons.start()
@@ -76,12 +77,8 @@ try:
         nfc.start()
         threads.append(nfc)
 
-        online_state_queue = Queue.Queue()
-        queues.append(online_state_queue)
-
-        media_resolver = MediaPathResolver()
-
-        media_manager = MediaManager(player, media_resolver)
+#        online_state_queue = Queue.Queue()
+#        queues.append(online_state_queue)
 
         while has_live_threads(threads):
 
@@ -98,21 +95,38 @@ try:
             (key, value) = get_timed_interruptable_precise(nfc_queue, timeout=1)
 #            is_online = get_timed_interruptable_precise(online_state_queue, timeout=1)
 
-            player = PlayerFactory.produce(is_online)
-            buttons.set_player(player)
-            media_manager.set_player(player)
-
             if key != last_key:
-                last_key = key
-                media_entity = MediaMapper.resolve(key, value)
-                print ("Key: "+str(key)+" - Value: "+str(value))
-                if isinstance(media_entity, MediaEntity):
-                    print ("Starte Verarbeitung")
-                    media_manager.manage(media_entity)
-                else:
-                    print ("Not Found!")
+                try:
+                    last_key = key
+                    playback(last_key, value, buttons)
+                except (EOFError, socket.error) as exception:
+                    print ("Exception cateched in main!")
+                    if "telnet connection closed" in exception:
+                        is_online = False
+                    if "Broken pipe" in exception:
+                        is_online = False
+                    playback(last_key, value, buttons)
 
 #            time.sleep(0.1)
+
+    def playback(key, value, buttons):
+        global player
+        media_resolver = MediaPathResolver()
+        player = PlayerFactory.produce(LMSAvailabilityCheck.check())
+        media_manager = MediaManager(player, media_resolver)
+
+        media_resolver.set_online(is_online)
+        buttons.set_player(player)
+        media_manager.set_player(player)
+
+        media_entity = MediaMapper.resolve(key, value)
+        print ("Key: " + str(key) + " - Value: " + str(value))
+
+        if isinstance(media_entity, MediaEntity):
+            print ("Starte Verarbeitung")
+            media_manager.manage(media_entity)
+        else:
+            print ("Not Found!")
 
 
     def get_timed_interruptable_precise(queue, timeout):

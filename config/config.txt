@@ -2,13 +2,13 @@
 host_name = lms_client
 
 [lms]
-server = 192.168.178.251
-client_name = raspberrypi
+server = 192.168.178.59
+client_name = piCorePlayer
 
 [gpio]
 next = 31
 prev = 29
-play = 37
+play = 33
 volume_up = 10
 volume_down = 36
 

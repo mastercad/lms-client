@@ -31,8 +31,9 @@ class MediaPathResolver:
 
     def resolve_lms_media_path(self):
         media_path = None
-        if "playlist" == self.media_entity.get_type():
-            media_path = "playlist id "+str(self.media_entity.get_lms_name())
+#        if "playlist" == self.media_entity.get_type():
+        media_path = "favorites playlist play item_id:0"
+            #  media_path = "playlist id "+str(self.media_entity.get_lms_name())
         return media_path
 
     def resolve_local_media_path(self):

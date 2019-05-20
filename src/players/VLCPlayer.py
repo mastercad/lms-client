@@ -41,7 +41,7 @@ class VLCPlayer:
             self.player.play()
         return
 
-    def play(self, media_file):
+    def play(self, media_file=None):
         self.current_file = media_file
         # altlast, kann eventuell weg, war geplant um mit dem alten lied weiter zu machen
         # wenn main neu gestartet wurde
