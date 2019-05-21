@@ -1,5 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
+import telnetlib
+
 from pylms.server import Server
 
 import Config
@@ -7,6 +9,7 @@ import socket
 from Exceptions import ServerNotFoundException
 
 server = None
+
 
 def provide():
     global server
@@ -16,12 +19,14 @@ def provide():
     :rtype: Server
     """
     config = Config.get_config()
+    hostname = config.get('lms', 'server')
+    server = Server(hostname)  # type: Server
 
-    if server is None:
-        server = Server(hostname=config.get('lms', 'server'))  # type: Server
-        try:
-            server.connect()
-        except socket.error:
-            raise ServerNotFoundException("LMS Server \"" + config.get('lms', 'server') + "\" nicht erreichbar!")
+    try:
+        # schmutzige lösung um den timeout zu verkürzen auf dem pylms server
+        server.telnet = telnetlib.Telnet(hostname, 9000, 1)
+        server.connect(False)
+    except socket.error:
+        raise ServerNotFoundException("LMS Server \"" + config.get('lms', 'server') + "\" nicht erreichbar!")
 
     return server
