@@ -16,16 +16,6 @@ def get_client():
 
     :rtype: Player
     """
-#    config = Config.get_config()
-
-#    server = LMSServerProvider.provide()
-#    player = server.get_player(config.get('lms', 'client_name'))  # type: Player
-
-#    if type(player) is not Player:
-#        exception_message = "Client \""+config.get('lms', 'client_name')+"\" nicht gefunden"
-#        raise ClientNotFoundException(exception_message)
-
-#    return player
     return LMSPlayer()
 
 
@@ -34,9 +24,7 @@ class LMSPlayer:
         self.config = Config.get_config()
         self.server = LMSServerProvider.provide()
         player_name = self.config.get('lms', 'client_name')
-        self.player = self.server.get_player()  # rtype: Player
-
-        print ("Player Type:"+str(type(self.player)))
+        self.player = self.server.get_player(player_name)  # rtype: Player
 
         if type(self.player) is NoneType:
             raise ClientNotFoundException(str(player_name)+" ist scheinbar nicht gestartet")
@@ -70,6 +58,9 @@ class LMSPlayer:
             print ("MediaFile: "+str(media_file))
             self.player.request(media_file)
         self.player.play()
+
+    def stop(self):
+        self.player.stop()
 
     def set_volume(self, volume):
         self.player.audio_set_volume(int(volume))

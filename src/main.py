@@ -29,8 +29,6 @@ try:
     CLOCK_MONTONIC_RAW = 4
 
     last_key = None
-    is_online = False
-    player = PlayerFactory.produce(LMSAvailabilityCheck.check())
 
     class timespec(ctypes.Structure):
         _fields_ = [

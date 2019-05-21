@@ -16,6 +16,7 @@ def produce(online):
             print ("Erstelle LMS Player!")
             return LMSPlayer.get_client()
         except ClientNotFoundException as exception:
+            print "Problem beim erstellen des LMS Players: "+str(exception)
             print ("Erstelle VLC Player!")
             return VLCPlayer.get_client()
     else:

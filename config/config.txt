@@ -4,6 +4,7 @@ host_name = lms_client
 [lms]
 server = 192.168.178.59
 client_name = piCorePlayer
+;client_name = raspberrypi
 
 [gpio]
 next = 31

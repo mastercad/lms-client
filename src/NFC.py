@@ -10,9 +10,11 @@ continue_reading = True
 
 class NFC(threading.Thread):
     def __init__(self, queue):
+        super(NFC, self).__init__()
+        self.setName("NFC Thread")
+
         self.queue = queue
         self.running = True
-        super(NFC, self).__init__()
         self._stop_event = threading.Event()
 
     def stop(self):

@@ -1,5 +1,6 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
+from threading import Thread
 
 import RPi.GPIO as GPIO
 import threading
@@ -56,9 +57,13 @@ def btn_volume_down(player):
 
 class Buttons(threading.Thread):
     def __init__(self, player=None):
-        self.player = player
-        self.running = True
         super(Buttons, self).__init__()
+        self.setName("Buttons Thread")
+
+        if player is not None:
+            self.player = player
+
+        self.running = True
         self._stop_event = threading.Event()
 
     def stop(self):
@@ -85,7 +90,7 @@ class Buttons(threading.Thread):
             if GPIO.input(pin_btn_volume_down):
                 btn_volume_down(self.player)
 
-            time.sleep(.1)
+            time.sleep(.5)
             delay_counter += 1
 
     def set_player(self, player):

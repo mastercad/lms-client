@@ -1,10 +1,12 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
+from types import NoneType
 
 from players import PlayerFactory
 import LMSAvailabilityCheck
 from MediaPathResolver import MediaPathResolver
 from players.LMSPlayer import LMSPlayer
+from players.VLCPlayer import VLCPlayer
 
 
 class MediaManager:
@@ -15,12 +17,17 @@ class MediaManager:
         self.media_entity = None
 
     def manage(self, media_entity):
+        print ("Manage!")
+
         """
 
         :param media_entity: MediaEntity
 
         :return:
         """
+
+        if isinstance(self.player, VLCPlayer):
+            self.player.stop()
 
         self.media_entity = media_entity
         self.is_online = LMSAvailabilityCheck.check()

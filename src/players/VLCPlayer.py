@@ -49,6 +49,9 @@ class VLCPlayer:
             self.current_file = self.load_last_played_file()
         self.play_file(media_file)
 
+    def stop(self):
+        self.player.stop()
+
     def set_volume(self, volume):
         self.player.audio_set_volume(int(volume))
 
