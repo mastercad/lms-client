@@ -4,6 +4,7 @@ host_name = lms_client
 [lms]
 server = 192.168.178.59
 client_name = piCorePlayer
+timeout=1
 ;client_name = raspberrypi
 
 [gpio]
@@ -20,6 +21,7 @@ volume_down = 36
 [player]
 ; IF NFC REMOVED, STOP PLAYBACK?
 stop_by_interrupt=False
+name=squeezelite
 
 [offline]
 ;directory=/media/LMS
@@ -27,3 +29,4 @@ directory=/home/pi/Music
 
 [system]
 last_played_file=data/last_played_file
+timeout=1

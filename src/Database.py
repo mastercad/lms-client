@@ -1,8 +1,9 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
-import sqlite3
 import os
+
+import sqlite3
 
 import Config
 

@@ -1,14 +1,14 @@
 #!/usr/bin/env python2
 # -*- coding: utf8 -*-
 from types import NoneType
+import os
 
 from pylms.player import Player
-import os
+from vlc import Media
 
 import Config
 import LMSServerProvider
 from Exceptions import ClientNotFoundException
-from vlc import Media
 
 
 def get_client():

@@ -39,7 +39,7 @@ activateModule "/usr/bin/squeezelize -o sysdefault:CARD=ALSA -s $IP -n $HOSTNAME
 # TypeError: unsupported operand type(s) for -=: 'Retry' and 'int'
 # hier ist kein fehler klar. ich habe das mehrmals nacheinander ausgeführt und irgendwann ging es dann durch
 # eventuell netzwerk probleme
-python -m pip install pylms mfrc522 python-vlc simple_queue configparser --user
+python -m pip install pylms mfrc522 python-vlc simple_queue configparser psutil --user
 
 # module aktivieren
 backupFile "/boot/config.txt"

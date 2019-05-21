@@ -1,18 +1,16 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
+import socket
+import telnetlib
 
-import LMSServerProvider
-from Exceptions import ServerNotFoundException
 import Config
 
 config = Config.get_config()
 
 
 def check():
-    print ("ONLINECHECK!")
     try :
-        LMSServerProvider.provide()
+        telnet = telnetlib.Telnet(config.get('lms', 'server'), 9000, float(config.get('system', 'timeout')))
         return True
-    except ServerNotFoundException as exception:
-        print ("Exception: "+str(exception))
+    except socket.timeout as exception:
         return False

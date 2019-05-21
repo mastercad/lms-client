@@ -1,12 +1,11 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
-from types import NoneType
 
 from players import PlayerFactory
-import LMSAvailabilityCheck
-from MediaPathResolver import MediaPathResolver
 from players.LMSPlayer import LMSPlayer
 from players.VLCPlayer import VLCPlayer
+import LMSAvailabilityCheck
+from MediaPathResolver import MediaPathResolver
 
 
 class MediaManager:
@@ -17,7 +16,6 @@ class MediaManager:
         self.media_entity = None
 
     def manage(self, media_entity):
-        print ("Manage!")
 
         """
 
@@ -33,7 +31,7 @@ class MediaManager:
         self.is_online = LMSAvailabilityCheck.check()
         self.player = PlayerFactory.produce(self.is_online)
 
-        # Falls es Probleme beim erstellen des Players gab, in offline modus wechseln
+        # Falls es Probleme beim erstellen des LMS Players gab, in offline modus wechseln
         if type(self.player) is not LMSPlayer:
             self.is_online = False
 

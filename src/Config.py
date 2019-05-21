@@ -1,6 +1,8 @@
 #!/usr/bin/env python2
 import os
+
 from configparser import ConfigParser
+
 from Exceptions import FileNotFoundException
 
 
