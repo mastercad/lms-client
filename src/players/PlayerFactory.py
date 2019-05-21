@@ -22,16 +22,12 @@ def produce(online):
     """
     if online is True:
         try:
-            print ("Erstelle LMS Player!")
             ensure_lms_player_is_running()
             return LMSPlayer.get_client()
-        except ClientNotFoundException as exception:
-            print "Problem beim erstellen des LMS Players: "+str(exception)
-            print ("Erstelle VLC Player!")
+        except ClientNotFoundException:
             kill_not_needed_lms_player()
             return VLCPlayer.get_client()
     else:
-        print ("Erstelle VLC Player!")
         kill_not_needed_lms_player()
         return VLCPlayer.get_client()
 
@@ -51,10 +47,8 @@ def kill_not_needed_lms_player():
 def ensure_lms_player_is_running():
     if False == SqueezeliteAvailabilityCheck.check():
         global config
-        print ("Starte Squeezelite!")
         # python 3.5
         #subprocess.run([config.get('player', 'name')])
         # python 2.7
 #        subprocess.call([config.get('player', 'name')])
-#        os.spawnl(os.P_NOWAIT, config.get('player', 'name'))
         subprocess.Popen([config.get('player', 'name')], stdout=subprocess.PIPE)

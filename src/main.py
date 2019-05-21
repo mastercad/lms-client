@@ -98,13 +98,11 @@ try:
                 last_key = key
 
                 media_entity = MediaMapper.generate(key, value)
-                print ("Key: " + str(key) + " - Value: " + str(value))
 
                 if isinstance(media_entity, MediaEntity):
-                    print ("Starte Verarbeitung")
                     media_manager.manage(media_entity)
                 else:
-                    print ("Not Found!")
+                    print ("Media File Not Found!")
 #            time.sleep(0.1)
 
 

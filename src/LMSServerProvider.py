@@ -26,7 +26,7 @@ def provide():
         # schmutzige lösung um den timeout zu verkürzen auf dem pylms server
         server.telnet = telnetlib.Telnet(hostname, 9000, float(config.get('lms', 'timeout')))
         server.connect(False)
+
+        return server
     except socket.error:
         raise ServerNotFoundException("LMS Server \"" + config.get('lms', 'server') + "\" nicht erreichbar!")
-
-    return server

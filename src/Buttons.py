@@ -77,6 +77,7 @@ class Buttons(threading.Thread):
         delay_counter = 0
 
         while self.running:
+            # hier ist eine logik vorgesehen um auf eine bestimmte dauer des drückens zu reagieren (natürlich ist 5000 bei 0.5 sleep etwas hoch...)
             if 5000 < delay_counter:
                 delay_counter = 0  # type: int
             if GPIO.input(pin_btn_next):
