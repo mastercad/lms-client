@@ -15,8 +15,9 @@ class MediaPathResolver:
         self.is_online = is_online
         return self
 
-    def resolve(self, media_entity):
+    def resolve(self, media_entity, is_online):
         self.media_entity = media_entity
+        self.is_online = is_online
 
         """
 

@@ -18,7 +18,6 @@ try:
     from Exceptions import ClientNotFoundException
     from Exceptions import ServerNotFoundException
     from MediaManager import MediaManager
-    from MediaPathResolver import MediaPathResolver
     import MediaMapper
     from Buttons import Buttons
     from NFC import NFC
@@ -62,7 +61,7 @@ try:
         global is_online
         global player
 
-        buttons = Buttons(player)
+        buttons = Buttons()
         buttons.start()
         threads.append(buttons)
 
@@ -76,6 +75,8 @@ try:
         nfc = NFC(nfc_queue)
         nfc.start()
         threads.append(nfc)
+
+        media_manager = MediaManager(buttons)
 
 #        online_state_queue = Queue.Queue()
 #        queues.append(online_state_queue)
@@ -96,37 +97,17 @@ try:
 #            is_online = get_timed_interruptable_precise(online_state_queue, timeout=1)
 
             if key != last_key:
-                try:
-                    last_key = key
-                    playback(last_key, value, buttons)
-                except (EOFError, socket.error) as exception:
-                    print ("Exception cateched in main!")
-                    if "telnet connection closed" in exception:
-                        is_online = False
-                    if "Broken pipe" in exception:
-                        is_online = False
-                    playback(last_key, value, buttons)
+                last_key = key
 
+                media_entity = MediaMapper.generate(key, value)
+                print ("Key: " + str(key) + " - Value: " + str(value))
+
+                if isinstance(media_entity, MediaEntity):
+                    print ("Starte Verarbeitung")
+                    media_manager.manage(media_entity)
+                else:
+                    print ("Not Found!")
 #            time.sleep(0.1)
-
-    def playback(key, value, buttons):
-        global player
-        media_resolver = MediaPathResolver()
-        player = PlayerFactory.produce(LMSAvailabilityCheck.check())
-        media_manager = MediaManager(player, media_resolver)
-
-        media_resolver.set_online(is_online)
-        buttons.set_player(player)
-        media_manager.set_player(player)
-
-        media_entity = MediaMapper.resolve(key, value)
-        print ("Key: " + str(key) + " - Value: " + str(value))
-
-        if isinstance(media_entity, MediaEntity):
-            print ("Starte Verarbeitung")
-            media_manager.manage(media_entity)
-        else:
-            print ("Not Found!")
 
 
     def get_timed_interruptable_precise(queue, timeout):

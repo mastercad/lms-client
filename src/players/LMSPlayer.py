@@ -1,10 +1,14 @@
 #!/usr/bin/env python2
 # -*- coding: utf8 -*-
+from types import NoneType
+
 from pylms.player import Player
+import os
 
 import Config
 import LMSServerProvider
 from Exceptions import ClientNotFoundException
+from vlc import Media
 
 
 def get_client():
@@ -29,9 +33,16 @@ class LMSPlayer:
     def __init__(self):
         self.config = Config.get_config()
         self.server = LMSServerProvider.provide()
-        self.player = self.server.get_player(self.config.get('lms', 'client_name'))  # rtype: Player
+        player_name = self.config.get('lms', 'client_name')
+        self.player = self.server.get_player()  # rtype: Player
+
+        print ("Player Type:"+str(type(self.player)))
+
+        if type(self.player) is NoneType:
+            raise ClientNotFoundException(str(player_name)+" ist scheinbar nicht gestartet")
+
 #        self.current_file = self.load_last_played_file()
-        self.paused=False
+        self.paused=self.player.is_player
 
     def toggle(self):
         self.player.toggle()

@@ -1,7 +1,8 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
-import players.LMSPlayer as LMSPlayer
-import players.VLCPlayer as VLCPlayer
+import LMSPlayer as LMSPlayer
+import VLCPlayer as VLCPlayer
+from Exceptions import ClientNotFoundException
 
 
 def produce(online):
@@ -11,8 +12,12 @@ def produce(online):
     :rtype: Player|VLCPlayer
     """
     if online is True:
-        print ("Erstelle LMS Player!")
-        return LMSPlayer.get_client()
+        try:
+            print ("Erstelle LMS Player!")
+            return LMSPlayer.get_client()
+        except ClientNotFoundException as exception:
+            print ("Erstelle VLC Player!")
+            return VLCPlayer.get_client()
     else:
         print ("Erstelle VLC Player!")
         return VLCPlayer.get_client()

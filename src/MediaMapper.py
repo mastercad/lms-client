@@ -8,7 +8,7 @@ from MediaEntity import MediaEntity
 database = Database()  # type: Database
 
 
-def resolve(key_id, key_value):
+def generate(key_id, key_value):
     """
 
     Returns
