@@ -14,6 +14,7 @@ class MediaEntity:
     local_name : str
     lms_name : str
     special_information : str
+    picture_path : str
 
     """
 
@@ -23,16 +24,16 @@ class MediaEntity:
     local_name = ''
     lms_name = ''
     special_information = ''
+    picture_path = ''
 
-    def __init__(self, id, rfid, local_name, lms_name, special_information, type):
-        self.id = id,
-        self.rfid = rfid,
+    def __init__(self, id=None, rfid=None, local_name=None, lms_name=None, special_information=None, type=None, picture_path=None):
+        self.id = id
+        self.rfid = rfid
         self.local_name = local_name
         self.lms_name = lms_name
         self.special_information = special_information
         self.type = type
-
-        print (self.id, self.rfid, self.local_name, self.lms_name, self.special_information, self.type)
+        self.picture_path = picture_path
 
     def get_id(self):
         return self.id
@@ -52,10 +53,20 @@ class MediaEntity:
         return self.type
 
     def set_type(self, type):
+        """
+
+        :param str type:
+
+        :return: MediaEntity
+        """
         self.type = type
         return self
 
     def get_local_name(self):
+        """
+
+        :return: str
+        """
         return self.local_name
 
     def set_local_name(self, local_name):
@@ -74,4 +85,11 @@ class MediaEntity:
 
     def set_special_information(self, special_information):
         self.special_information = special_information
+        return self
+
+    def get_picture_path(self):
+        return self.picture_path
+
+    def set_picture_path(self, picture_path):
+        self.picture_path = picture_path
         return self

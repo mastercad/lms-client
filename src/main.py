@@ -1,6 +1,5 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
-#from docutils.nodes import system_message
 
 try:
     threads = []
@@ -22,7 +21,7 @@ try:
     from Buttons import Buttons
     from NFC import NFC
     from MediaEntity import MediaEntity
-    from Database import Database
+    import Database
 
 #    from Volume import Volume
 
@@ -59,6 +58,8 @@ try:
         global is_online
         global player
 
+        database = Database.Database()
+
         buttons = Buttons()
         buttons.start()
         threads.append(buttons)
@@ -92,18 +93,16 @@ try:
             # könnte man hier das emtfernen eines tags vernachlässigen, bzw. irgendwie hier prüfen.
             # oder das in einen eigenen thread auslagern, der sich dann um die verarbeitung kümmert, wenn nichts kommt
             (key, value) = get_timed_interruptable_precise(nfc_queue, timeout=1)
-#            is_online = get_timed_interruptable_precise(online_state_queue, timeout=1)
 
             if key != last_key:
                 last_key = key
 
-                media_entity = MediaMapper.generate(key, value)
+                media_entity = MediaMapper.generate(database.find(key))
 
-                if isinstance(media_entity, MediaEntity):
+                if media_entity.get_rfid() is not None:
                     media_manager.manage(media_entity)
                 else:
-                    print ("Media File Not Found!")
-#            time.sleep(0.1)
+                    print ("RFID nicht gefunden!")
 
 
     def get_timed_interruptable_precise(queue, timeout):
@@ -124,10 +123,10 @@ except (KeyboardInterrupt, Exception) as exception:
 
     exc_type, exc_obj, exc_tb = sys.exc_info()
     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-    print (exception)
-    print (exc_type, fname, exc_tb.tb_lineno)
-    print (traceback.format_exc())
-    print ("Sending kill to threads...")
+#    print (exception)
+#    print (exc_type, fname, exc_tb.tb_lineno)
+#    print (traceback.format_exc())
+#    print ("Sending kill to threads...")
 
     for thread in threads:  # type: thread
         thread.stop()

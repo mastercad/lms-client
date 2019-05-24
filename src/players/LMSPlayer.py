@@ -29,16 +29,10 @@ class LMSPlayer:
         if type(self.player) is NoneType:
             raise ClientNotFoundException(str(player_name)+" ist scheinbar nicht gestartet")
 
-#        self.current_file = self.load_last_played_file()
         self.paused=self.player.is_player
 
     def toggle(self):
         self.player.toggle()
-#        if self.player.is_playing():
-#            self.paused=True
-#            self.player.pause()
-#        else:
-#            self.play_file(self.load_last_played_file())
 
     def next(self):
         self.player.next()
@@ -48,16 +42,22 @@ class LMSPlayer:
         self.player.prev()
         return
 
-    def play(self, media_file=None):
-        self.current_file = media_file
+    def play(self, media_path=None):
+        self.current_file = media_path
         # altlast, kann eventuell weg, war geplant um mit dem alten lied weiter zu machen
         # wenn main neu gestartet wurde
 #        if "" == self.current_file:
 #            self.current_file = self.load_last_played_file()
-        if media_file is not None:
-            print ("MediaFile: "+str(media_file))
-            self.player.request(media_file)
-        self.player.play()
+#        if media_file is not None:
+#            self.player.request("playlist play 1")
+#            print (self.player.request(str(self.config.get('lms', 'client_name'))+" playlist play /Musik/Musik/John_Lennon_-_Woman.mp3"))
+
+#        self.player.play()
+#        self.player.playlist_play("C:\Users\andre\Music\Musik\80erBalladen\John_Lennon_-_Woman.mp3")
+#        self.player.playlist_play("/Music/Musik/80erBalladen/John_Lennon_-_Woman.mp3")
+#        self.player.playlist_play("/Musikordner/Music/Musik/80erBalladen/John_Lennon_-_Woman.mp3")
+#        self.player.playlist_play("C:/Users/andre/Music/Musik/80erBalladen/John_Lennon_-_Woman.mp3")
+        self.player.playlist_play(media_path)
 
     def stop(self):
         self.player.stop()

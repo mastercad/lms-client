@@ -3,9 +3,9 @@ host_name = lms_client
 
 [lms]
 server = 192.168.178.59
+;client_name = raspberrypi
 client_name = piCorePlayer
 timeout=1
-;client_name = raspberrypi
 
 [gpio]
 next = 31
@@ -14,9 +14,8 @@ play = 33
 volume_up = 10
 volume_down = 36
 
-;volume = 26
-
 [nfc]
+card_key=255,255,255,255,255,255
 
 [player]
 ; IF NFC REMOVED, STOP PLAYBACK?

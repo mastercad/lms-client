@@ -32,7 +32,7 @@ class MediaManager:
         self.player = PlayerFactory.produce(self.is_online)
 
         # Falls es Probleme beim erstellen des LMS Players gab, in offline modus wechseln
-        if type(self.player) is not LMSPlayer:
+        if not isinstance(self.player, LMSPlayer):
             self.is_online = False
 
         self.buttons.set_player(self.player)
@@ -42,6 +42,5 @@ class MediaManager:
 
         self.player.play(media_path)
 
-    def __end(self):
-        print ("Ende "+str(type(self)))
+    def __del__(self):
         self.player.stop()

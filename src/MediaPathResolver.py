@@ -16,26 +16,23 @@ class MediaPathResolver:
         return self
 
     def resolve(self, media_entity, is_online):
+        """
+
+        :param MediaEntity media_entity:
+        :param bool is_online:
+
+        :return:
+        """
         self.media_entity = media_entity
         self.is_online = is_online
 
-        """
-
-        :param media_entity: MediaEntity
-
-        :return: str
-        """
         if self.is_online:
             return self.resolve_lms_media_path()
         else:
             return self.resolve_local_media_path()
 
     def resolve_lms_media_path(self):
-        media_path = None
-#        if "playlist" == self.media_entity.get_type():
-        media_path = "favorites playlist play item_id:0"
-            #  media_path = "playlist id "+str(self.media_entity.get_lms_name())
-        return media_path
+        return self.media_entity.get_lms_name()
 
     def resolve_local_media_path(self):
         local_base_bath = self.config.get('offline', 'directory')

@@ -28,31 +28,31 @@ def btn_next(player):
     # GPIO.remove_event_detect(5);
     player.next()
     print("Button next pressed!")
-#    time.sleep(.5)
+    time.sleep(.5)
 
 
 def btn_prev(player):
     player.prev()
     print("Button prev pressed!")
-#    time.sleep(.5)
+    time.sleep(.5)
 
 
 def btn_toggle_play(player):
     player.toggle()
     print ("Play/Pause pressed")
-#    time.sleep(.5)
+    time.sleep(.5)
 
 
 def btn_volume_up(player):
     player.prev()
     print("Button volume up pressed!")
-#    time.sleep(.5)
+    time.sleep(.1)
 
 
 def btn_volume_down(player):
     player.prev()
     print("Button volume down pressed!")
-#    time.sleep(.5)
+    time.sleep(.1)
 
 
 class Buttons(threading.Thread):
@@ -91,7 +91,7 @@ class Buttons(threading.Thread):
             if GPIO.input(pin_btn_volume_down):
                 btn_volume_down(self.player)
 
-            time.sleep(.5)
+            time.sleep(.01)
             delay_counter += 1
 
     def set_player(self, player):
