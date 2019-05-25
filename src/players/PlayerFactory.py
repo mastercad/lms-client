@@ -52,6 +52,8 @@ def ensure_lms_player_is_running():
         global config
         # @TODO hier gibts noch probleme. stellenweise wird squeezelite hier mit defunct gestartet, da muss noch ein fix her
 #        process = subprocess.Popen([config.get('player', 'name'), '-n', config.get('lms', 'client_name'), '2>&1 &'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        process = subprocess.Popen([config.get('player', 'path'), '-n', config.get('lms', 'client_name')], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        devnull = open(os.devnull, 'w')
+#        process = subprocess.Popen([config.get('player', 'path'), '-n', config.get('lms', 'client_name')], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        process = subprocess.Popen([config.get('player', 'path'), '-n', config.get('lms', 'client_name')], stdout=devnull, stderr=devnull)
 #        process.wait()
 #        stdout, stderr = process.communicate()
