@@ -11,8 +11,8 @@ timeout=1
 next = 31
 prev = 29
 play = 33
-volume_up = 10
-volume_down = 36
+volume_up = 13
+volume_down = 11
 
 [nfc]
 card_key=255,255,255,255,255,255
@@ -20,7 +20,7 @@ card_key=255,255,255,255,255,255
 [player]
 ; IF NFC REMOVED, STOP PLAYBACK?
 stop_by_interrupt=False
-name=squeezelite
+path=/usr/bin/squeezelite
 
 [offline]
 ;directory=/media/LMS

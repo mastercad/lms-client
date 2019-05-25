@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf8 -*-
 from types import NoneType
+import time
 import os
 
 from pylms.player import Player
@@ -46,27 +47,26 @@ class LMSPlayer:
         self.current_file = media_path
         # altlast, kann eventuell weg, war geplant um mit dem alten lied weiter zu machen
         # wenn main neu gestartet wurde
+        # da aber das zum chip gehörige lied gestartet werden soll, kann diese ganze logik mit last played file glaub ganz weg
 #        if "" == self.current_file:
 #            self.current_file = self.load_last_played_file()
 #        if media_file is not None:
 #            self.player.request("playlist play 1")
-#            print (self.player.request(str(self.config.get('lms', 'client_name'))+" playlist play /Musik/Musik/John_Lennon_-_Woman.mp3"))
 
-#        self.player.play()
-#        self.player.playlist_play("C:\Users\andre\Music\Musik\80erBalladen\John_Lennon_-_Woman.mp3")
-#        self.player.playlist_play("/Music/Musik/80erBalladen/John_Lennon_-_Woman.mp3")
-#        self.player.playlist_play("/Musikordner/Music/Musik/80erBalladen/John_Lennon_-_Woman.mp3")
-#        self.player.playlist_play("C:/Users/andre/Music/Musik/80erBalladen/John_Lennon_-_Woman.mp3")
         self.player.playlist_play(media_path)
+        # workaround. entweder hier warten und hoffen dass das lied inzwischen geladen ist oder entfernen und manuell
+        # das lied per play-button starten
+        time.sleep(1)
+        self.player.play()
 
     def stop(self):
         self.player.stop()
 
     def set_volume(self, volume):
-        self.player.audio_set_volume(int(volume))
+        self.player.set_volume(int(volume))
 
     def get_volume(self):
-        return self.player.audio_get_volume()
+        return self.player.get_volume()
 
     def play_file(self, media_file_path):
         if False is self.paused:

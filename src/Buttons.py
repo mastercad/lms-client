@@ -1,10 +1,10 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
-from threading import Thread
+
+import time
+from threading import Thread, Event
 
 import RPi.GPIO as GPIO
-import threading
-import time
 
 import Config
 
@@ -17,10 +17,10 @@ pin_btn_volume_up   = config.getint('gpio', 'volume_up')
 pin_btn_volume_down = config.getint('gpio', 'volume_down')
 
 GPIO.setmode(GPIO.BOARD)
-GPIO.setup(pin_btn_next, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(pin_btn_prev, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(pin_btn_play, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(pin_btn_volume_up, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(pin_btn_next,        GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(pin_btn_prev,        GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(pin_btn_play,        GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(pin_btn_volume_up,   GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(pin_btn_volume_down, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 
@@ -44,18 +44,22 @@ def btn_toggle_play(player):
 
 
 def btn_volume_up(player):
-    player.prev()
     print("Button volume up pressed!")
+    current_volume=player.get_volume()
+    current_volume+=1
+    player.set_volume(current_volume)
     time.sleep(.1)
 
 
 def btn_volume_down(player):
-    player.prev()
     print("Button volume down pressed!")
+    current_volume=player.get_volume()
+    current_volume-=1
+    player.set_volume(current_volume)
     time.sleep(.1)
 
 
-class Buttons(threading.Thread):
+class Buttons(Thread):
     def __init__(self, player=None):
         super(Buttons, self).__init__()
         self.setName("Buttons Thread")
@@ -64,7 +68,7 @@ class Buttons(threading.Thread):
             self.player = player
 
         self.running = True
-        self._stop_event = threading.Event()
+        self._stop_event = Event()
 
     def stop(self):
         self.running = False

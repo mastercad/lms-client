@@ -8,4 +8,4 @@ config = Config.get_config()
 
 
 def check():
-    return config.get('player','name') in (p.name() for p in psutil.process_iter())
+    return config.get('player','path')+" -n "+config.get('lms', 'client_name') in (p.name() for p in psutil.process_iter())

@@ -1,5 +1,6 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
+from types import NoneType
 
 from players import PlayerFactory
 from players.LMSPlayer import LMSPlayer
@@ -43,4 +44,5 @@ class MediaManager:
         self.player.play(media_path)
 
     def __del__(self):
-        self.player.stop()
+        if type(self.player) is not NoneType:
+            self.player.stop()

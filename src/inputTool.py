@@ -36,6 +36,8 @@ def new_database_entry():
     database = Database.Database()
     media_entity = MediaMapper.generate(database.find(uid))
 
+    media_entity.set_rfid(uid)
+
     # local_path
     media_entity.set_local_name(str(prompt_with_default("Lokaler Pfad", media_entity.get_local_name())))
 

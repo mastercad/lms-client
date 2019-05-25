@@ -1,8 +1,9 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
-import threading
+from threading import Thread, Event
 import time
+
 import RPi.GPIO as GPIO #  only import for avoid warnings from GPIO
 
 import Reader
@@ -11,14 +12,14 @@ import Reader
 GPIO.setwarnings(False)
 
 
-class NFC(threading.Thread):
+class NFC(Thread):
     def __init__(self, queue):
         super(NFC, self).__init__()
         self.setName("NFC Thread")
 
         self.queue = queue
         self.running = True
-        self._stop_event = threading.Event()
+        self._stop_event = Event()
         self.old_reader_content = None
 
     def stop(self):
