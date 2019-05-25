@@ -5,46 +5,24 @@ try:
     threads = []
     queues = []
 
-    import RPi.GPIO as GPIO
-    import time
-    import Queue
-    import ctypes
     import os
     import socket
+    import time
 
-    import players.PlayerFactory as PlayerFactory
-    import LMSAvailabilityCheck
-    from Exceptions import ClientNotFoundException
-    from Exceptions import ServerNotFoundException
-    from MediaManager import MediaManager
+    import RPi.GPIO as GPIO
+    import Queue
+
+    import Database
     import MediaMapper
+    from MediaEntity import MediaEntity
+    from MediaManager import MediaManager
     from Buttons import Buttons
     from NFC import NFC
-    from MediaEntity import MediaEntity
-    import Database
+    from Time import monotonic_time
 
 #    from Volume import Volume
 
-    CLOCK_MONTONIC_RAW = 4
-
     last_key = None
-
-    class timespec(ctypes.Structure):
-        _fields_ = [
-            ('tv_sec', ctypes.c_long),
-            ('tv_nsec', ctypes.c_long)
-        ]
-
-    librt = ctypes.CDLL('librt.so.1', use_errno=True)
-    clock_gettime = librt.clock_gettime
-    clock_gettime.argtypes = [ctypes.c_int, ctypes.POINTER(timespec)]
-
-    def monotonic_time():
-        time_spec = timespec()
-        if 0 != clock_gettime(CLOCK_MONTONIC_RAW, ctypes.pointer(time_spec)):
-            errno_ = ctypes.get_errno()
-            raise OSError(errno_, os.strerror(errno_))
-        return time_spec.tv_sec + time_spec.tv_nsec * 1e-9
 
 
     def has_live_threads(threads):
@@ -77,13 +55,7 @@ try:
 
         media_manager = MediaManager(buttons)
 
-#        online_state_queue = Queue.Queue()
-#        queues.append(online_state_queue)
-
         while has_live_threads(threads):
-
-            # das dient später einem dynamischen austausch der player wenn während der wiedergabe der LMS weg ist
-#            online_state = LMSAvailabilityCheck.check()
 
             # synchronization timeout of threads kill
             [thread.join(1) for thread in threads
@@ -117,7 +89,6 @@ try:
     if __name__ == '__main__':
         main()
 
-#except (KeyboardInterrupt, ClientNotFoundException, ServerNotFoundException) as exception:
 except (KeyboardInterrupt, Exception) as exception:
     import sys
     import traceback
