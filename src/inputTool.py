@@ -1,15 +1,21 @@
 #!/usr/bin/env python2
 # -*- coding: utf8 -*-
 import curses
+import RPi.GPIO as GPIO
+import os
 
-import Reader
-import Writer
 import Tools
 import Database
 import MediaMapper
+from mfrc522 import SimpleMFRC522
+
+GPIO.setwarnings(False)
+
+MFRC522 = SimpleMFRC522()
 
 
 def read_start_change():
+    os.system('clear')
     print ("Eingabe Wählen:")
     print ("    [1] => Datenbankeintrag anlegen oder updaten")
     print ("    [2] => Chip beschreiben")
@@ -25,15 +31,13 @@ def read_start_change():
 def new_database_entry():
     TYPES = ['PLAYLIST', 'MEDIA_FOLDER', 'MEDIA_FILE']
 
-    (uid, value) = Reader.read()
-
-    print (uid)
-    print (value)
+    (uid, value) = MFRC522.read()
 
     if value is not None:
-        value = Tools.remove_invisible_chars(Tools.convert_ascii_string_to_string(value, ','))
+        value = Tools.remove_invisible_chars(value)
 
     database = Database.Database()
+
     media_entity = MediaMapper.generate(database.find(uid))
 
     media_entity.set_rfid(uid)
@@ -55,8 +59,6 @@ def new_database_entry():
 
     print (database.save(media_entity))
 
-    exit(0)
-
 
 def prompt_with_default(question, default_value=None):
     if default_value is None or "None" in default_value:
@@ -68,17 +70,14 @@ def write_chip():
     stdscr = curses.initscr()
     stdscr.clear()
     stdscr.addstr("Eingabe von maximal 16 Zeichen: ")
-    Reader.read()
+    MFRC522.read()
     content = stdscr.getstr(1, 0, 16)
     curses.endwin()
 
-    if 16 < len(content):
-        content = content[:16]
-
-    Writer.write(Tools.fill_list_with_char(Tools.convert_string_to_ascii_array(content), 16, Tools.convert_char_to_ascii(" ")))
+    MFRC522.write(content)
 
     print ("Daten geschrieben:")
-    print (Tools.convert_ascii_string_to_string(Reader.read()[1], ','))
+    print (MFRC522.read()[1])
 
     exit(0)
 
@@ -91,5 +90,6 @@ try:
             new_database_entry()
         elif 2 == change:
             write_chip()
-except:
-    exit(0)
+finally:
+    GPIO.cleanup()
+

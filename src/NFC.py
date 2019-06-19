@@ -6,7 +6,8 @@ import time
 
 import RPi.GPIO as GPIO #  only import for avoid warnings from GPIO
 
-import Reader
+from mfrc522 import SimpleMFRC522
+
 
 # if the player run and the write tool is used, warnings spawn and have no effect => disable
 GPIO.setwarnings(False)
@@ -15,6 +16,7 @@ GPIO.setwarnings(False)
 class NFC(Thread):
     def __init__(self, queue):
         super(NFC, self).__init__()
+        self.MFRC522 = SimpleMFRC522()
         self.setName("NFC Thread")
 
         self.queue = queue
@@ -31,7 +33,7 @@ class NFC(Thread):
 
     def run(self):
         while self.running:
-            reader_content = Reader.read()
+            reader_content = self.MFRC522.read()
 
             if reader_content is not None and self.old_reader_content != reader_content:
                 self.queue.queue.clear()
