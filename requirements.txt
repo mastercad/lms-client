@@ -1,4 +1,4 @@
-configparser==3.8.0
+configparser==3.8.1
 pylms==1.0
 python-vlc==3.0.6109
 mfrc522==0.0.7
