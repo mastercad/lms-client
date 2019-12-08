@@ -1,0 +1,9 @@
+version: '3.4'
+
+services:
+
+  python:
+    build: .docker/
+    container_name: lms_python_client
+    environment: 
+      - BUILD_HOST_ARCH=x86_64

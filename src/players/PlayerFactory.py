@@ -22,7 +22,6 @@ def produce(online):
     """
     if online is True:
         try:
-            ensure_lms_player_is_running()
             return LMSPlayer.get_client()
         except ClientNotFoundException:
             kill_not_needed_lms_player()
@@ -46,14 +45,3 @@ def kill_not_needed_lms_player():
                 os.system("sudo killall -9 "+str(config.get('player', 'path')))
             except CalledProcessError as exception:
                 return True
-
-def ensure_lms_player_is_running():
-    if False == SqueezeliteAvailabilityCheck.check():
-        global config
-        # @TODO hier gibts noch probleme. stellenweise wird squeezelite hier mit defunct gestartet, da muss noch ein fix her
-#        process = subprocess.Popen([config.get('player', 'name'), '-n', config.get('lms', 'client_name'), '2>&1 &'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        devnull = open(os.devnull, 'w')
-#        process = subprocess.Popen([config.get('player', 'path'), '-n', config.get('lms', 'client_name')], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        process = subprocess.Popen([config.get('player', 'path'), '-n', config.get('lms', 'client_name')], stdout=devnull, stderr=devnull)
-#        process.wait()
-#        stdout, stderr = process.communicate()

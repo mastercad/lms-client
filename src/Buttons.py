@@ -26,37 +26,43 @@ GPIO.setup(pin_btn_volume_down, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 def btn_next(player):
     # GPIO.remove_event_detect(5);
-    player.next()
-    print("Button next pressed!")
-    time.sleep(.5)
+
+    if isinstance(player, (LMSPlayer, VLCPlayer)):
+        player.next()
+        print("Button next pressed!")
+        time.sleep(.5)
 
 
 def btn_prev(player):
-    player.prev()
-    print("Button prev pressed!")
-    time.sleep(.5)
+    if isinstance(player, (LMSPlayer, VLCPlayer)):
+        player.prev()
+        print("Button prev pressed!")
+        time.sleep(.5)
 
 
 def btn_toggle_play(player):
-    player.toggle()
-    print ("Play/Pause pressed")
-    time.sleep(.5)
+    if isinstance(player, (LMSPlayer, VLCPlayer)):
+        player.toggle()
+        print ("Play/Pause pressed")
+        time.sleep(.5)
 
 
 def btn_volume_up(player):
-    print("Button volume up pressed!")
-    current_volume=player.get_volume()
-    current_volume+=1
-    player.set_volume(current_volume)
-    time.sleep(.1)
+    if isinstance(player, (LMSPlayer, VLCPlayer)):
+        print("Button volume up pressed!")
+        current_volume=player.get_volume()
+        current_volume+=1
+        player.set_volume(current_volume)
+        time.sleep(.1)
 
 
 def btn_volume_down(player):
-    print("Button volume down pressed!")
-    current_volume=player.get_volume()
-    current_volume-=1
-    player.set_volume(current_volume)
-    time.sleep(.1)
+    if isinstance(player, (LMSPlayer, VLCPlayer)):
+        print("Button volume down pressed!")
+        current_volume=player.get_volume()
+        current_volume-=1
+        player.set_volume(current_volume)
+        time.sleep(.1)
 
 
 class Buttons(Thread):
