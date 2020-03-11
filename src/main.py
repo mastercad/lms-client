@@ -20,8 +20,6 @@ try:
     from NFC import NFC
     from Time import monotonic_time
 
-#    from Volume import Volume
-
     last_key = None
 
 
@@ -40,11 +38,8 @@ try:
 
         buttons = Buttons()
         buttons.start()
+        
         threads.append(buttons)
-
-#        volume = Volume(player)
-#        volume.start()
-#        threads.append(volume)
 
         nfc_queue = Queue.Queue()
         queues.append(nfc_queue)
@@ -56,7 +51,6 @@ try:
         media_manager = MediaManager(buttons)
 
         while has_live_threads(threads):
-
             # synchronization timeout of threads kill
             [thread.join(1) for thread in threads
             if thread is not None and thread.isAlive()]
@@ -66,6 +60,7 @@ try:
             # oder das in einen eigenen thread auslagern, der sich dann um die verarbeitung kümmert, wenn nichts kommt
             (key, value) = get_timed_interruptable_precise(nfc_queue, timeout=1)
 
+            
             if key != last_key:
                 last_key = key
 
@@ -93,8 +88,8 @@ except (KeyboardInterrupt, Exception) as exception:
     import sys
     import traceback
 
-    exc_type, exc_obj, exc_tb = sys.exc_info()
-    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+#    exc_type, exc_obj, exc_tb = sys.exc_info()
+#    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
 #    print (exception)
 #    print (exc_type, fname, exc_tb.tb_lineno)
 #    print (traceback.format_exc())

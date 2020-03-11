@@ -30,7 +30,9 @@ class MediaManager:
 
         self.media_entity = media_entity
         self.is_online = LMSAvailabilityCheck.check()
-        self.player = PlayerFactory.produce(self.is_online)
+        
+        if self.player is None:
+            self.player = PlayerFactory.produce(self.is_online)
 
         # Falls es Probleme beim erstellen des LMS Players gab, in offline modus wechseln
         if not isinstance(self.player, LMSPlayer):

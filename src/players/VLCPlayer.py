@@ -18,6 +18,7 @@ def get_client():
 class VLCPlayer:
     def __init__(self):
         self.config = Config.get_config()
+#        self.vlc_instance = vlc.Instance("--no-xlib")  # :rtype: vlc
         self.vlc_instance = vlc.Instance()  # :rtype: vlc
         self.player = self.vlc_instance.media_player_new()  # :rtype: MediaPlayer
         self.current_file = self.load_last_played_file()
@@ -25,18 +26,21 @@ class VLCPlayer:
 
     def toggle(self):
         if self.player.is_playing():
-            self.paused=True
             self.player.pause()
+            self.paused=True
         else:
             self.play_file(self.load_last_played_file())
+            self.paused=False
 
     def next(self):
-        if self.paused is False and self.player.is_playing:
+#        if self.paused is False and self.player.is_playing:
+        if self.player.is_playing:
             self.player.stop()
         return
 
     def prev(self):
-        if self.paused is False and self.player.is_playing:
+#        if self.paused is False and self.player.is_playing:
+        if self.player.is_playing:
             self.player.stop()
             self.player.play()
         return
@@ -47,6 +51,7 @@ class VLCPlayer:
         # wenn main neu gestartet wurde
         if "" == self.current_file:
             self.current_file = self.load_last_played_file()
+        self.paused=False
         self.play_file(media_file)
 
     def stop(self):
@@ -59,7 +64,8 @@ class VLCPlayer:
         return self.player.audio_get_volume()
 
     def play_file(self, media_file_path):
-        if False is self.paused:
+        if self.paused is False:
+            print ("Spiele:"+media_file_path)
             self.player.set_media(Media(media_file_path))
             self.paused=False
         self.player.play()
@@ -88,5 +94,3 @@ class VLCPlayer:
         if not os.path.exists(file_path_name):
             open(file_path_name, 'w').close()
         return os.path.exists(file_path_name)
-
-

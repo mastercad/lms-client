@@ -5,8 +5,9 @@ import time
 from threading import Thread, Event
 
 import RPi.GPIO as GPIO
-
 import Config
+from players.LMSPlayer import LMSPlayer
+from players.VLCPlayer import VLCPlayer
 
 config = Config.get_config()
 
@@ -27,21 +28,21 @@ GPIO.setup(pin_btn_volume_down, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 def btn_next(player):
     # GPIO.remove_event_detect(5);
 
-    if isinstance(player, (LMSPlayer, VLCPlayer)):
+    if isinstance(player, (VLCPlayer, LMSPlayer)):
         player.next()
         print("Button next pressed!")
         time.sleep(.5)
 
 
 def btn_prev(player):
-    if isinstance(player, (LMSPlayer, VLCPlayer)):
+    if isinstance(player, (VLCPlayer, LMSPlayer)):
         player.prev()
         print("Button prev pressed!")
         time.sleep(.5)
 
 
 def btn_toggle_play(player):
-    if isinstance(player, (LMSPlayer, VLCPlayer)):
+    if isinstance(player, (VLCPlayer, LMSPlayer)):
         player.toggle()
         print ("Play/Pause pressed")
         time.sleep(.5)
@@ -57,7 +58,7 @@ def btn_volume_up(player):
 
 
 def btn_volume_down(player):
-    if isinstance(player, (LMSPlayer, VLCPlayer)):
+    if isinstance(player, (VLCPlayer, LMSPlayer)):
         print("Button volume down pressed!")
         current_volume=player.get_volume()
         current_volume-=1
@@ -66,22 +67,27 @@ def btn_volume_down(player):
 
 
 class Buttons(Thread):
+
     def __init__(self, player=None):
         super(Buttons, self).__init__()
         self.setName("Buttons Thread")
+        self.player = None
 
         if player is not None:
             self.player = player
 
         self.running = True
+        self._stop = Event()
         self._stop_event = Event()
 
     def stop(self):
         self.running = False
+        self._stop.set()
         self._stop_event.set()
 
     def stopped(self):
-        return self._stop_event.is_set()
+        return self._stop.is_set()
+#        return self._stop_event.is_set()
 
     def run(self):
         delay_counter = 0

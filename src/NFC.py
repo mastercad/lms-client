@@ -22,14 +22,17 @@ class NFC(Thread):
         self.queue = queue
         self.running = True
         self._stop_event = Event()
+        self._stop = Event()
         self.old_reader_content = None
 
     def stop(self):
         self.running = False
+        self._stop.set()
         self._stop_event.set()
 
     def stopped(self):
-        return self._stop_event.is_set()
+#        return self._stop_event.is_set()
+        return self._stop.is_set()
 
     def run(self):
         while self.running:
@@ -40,4 +43,4 @@ class NFC(Thread):
                 self.old_reader_content = reader_content
                 self.queue.put(reader_content)
 
-            time.sleep(0.1)
+#            time.sleep(0.1)

@@ -2,9 +2,9 @@
 host_name = lms_client
 
 [lms]
-server = 192.168.178.59
+server = 192.168.1.95
 ;client_name = raspberrypi
-client_name = piCorePlayer
+client_name = piCorePlayer_Bad
 timeout=1
 
 [gpio]

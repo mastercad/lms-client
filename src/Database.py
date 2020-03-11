@@ -50,6 +50,9 @@ class Database:
         MediaEntity
 
         """
+        
+        print (uid)
+        
         if uid is None:
             return None
 

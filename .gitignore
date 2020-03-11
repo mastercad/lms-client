@@ -1,1 +1,5 @@
 .idea
+data
+venv
+*.pyc
+.vscode

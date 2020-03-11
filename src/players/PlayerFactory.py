@@ -22,11 +22,15 @@ def produce(online):
     """
     if online is True:
         try:
+            # ensure_lms_player_is_running()
+            print "online player"
             return LMSPlayer.get_client()
         except ClientNotFoundException:
+            print "use offline player"
             kill_not_needed_lms_player()
             return VLCPlayer.get_client()
     else:
+        print "use offline player"
         kill_not_needed_lms_player()
         return VLCPlayer.get_client()
 
